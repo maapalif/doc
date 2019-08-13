@@ -1,9 +1,4 @@
 <div class="container" style="margin-top: 5px; margin-right: 0px; margin-left: 0px; max-width: 80%; font-size: 14px; ">
-
-	<div>
-		<a role="button" href="<?php echo site_url('admin/addPermission')?>" class="btn" style="background-color: #1e7e34; color: #FFFFFF;"><span class="btn-label"><i class="fa fa-plus"></i></span>New</a>
-		<p>	
-	</div>
 	
 		<!-- table -->
 		<div class="table-responsive" style="padding-right: 5px;">
