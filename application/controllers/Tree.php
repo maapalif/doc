@@ -183,6 +183,8 @@ class Tree extends MY_Controller
 
     function deleteAlert() {
         $id = $this->input->post('id');
+
+        die(var_dump($id));
         $data = array(
             'id'     => $id,
             'folders'  => $this->Tree_model->countfolders($id),

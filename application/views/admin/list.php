@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
-        var id = $("#delete").attr("data-id");
+        var id = $("#delete").attr("data");
         $.ajax({
             type    : "POST",
             data    : {id:id},
@@ -37,7 +37,10 @@
 			    <tbody>
 				<?php
 				$i = 1;
-				foreach($data as $h) {							
+				foreach($data as $h) {	
+				 $id = $h->ID;		
+				  $folders  = $this->Tree_model->countfolders($id);
+            	 $files  = $this->Tree_model->countfiles($id);					
 				?>
 					<tr>
 						<td align= "center"><?php echo $i++ ?></td>
@@ -57,12 +60,13 @@
 				        ?></td>	
 				        <td align= "center"><?php echo $h->Desc ;?></td>	
 				        <td align= "center">
+				        	<a href="<?php echo site_url('admin/delete')?>/<?= $h->ID ?>" title="Delete" onclick="return confirm('Are you sure you want to delete? There is <?php echo $folders ?> Folder and <?php echo $files ?> Files.' )"><i class="fa fa-fw fa-window-close" style="color: #000000;"></i></a>
 				        	<?php if($h->ParentID == NULL) { ?>
 							<a href="<?php echo site_url('admin/editParents')?>/<?= $h->ID ?>" title="Edit"><i class="fa fa-fw fa-pencil-square" style="color: #000000;"></i></a>
 							<?php }else{?>
 							<a href="<?php echo site_url('admin/editChild')?>/<?= $h->ID ?>" title="Edit"><i class="fa fa-fw fa-pencil-square" style="color: #000000;"></i></a>
 							<?php }?>
-							<a href="#" id="delete" data-id="<?= $h->ID; ?>" data-toggle="modal" data-target="#customModal"><i class="fa fa-fw fa-window-close" style="color: #000000;"></i></a>
+							
 						</td>  
 				    </tr>
 				<?php } ?>
