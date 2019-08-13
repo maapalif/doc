@@ -505,14 +505,14 @@ class Admin extends MY_Controller
         $n = 1;
         $i  = $this->input;
             
-        $data  = array('discard'        => $n,'UpdatedBy'   => $this->auth_username);
-        $where = array('r_ID'   => $id);
+        $data  = array('discard'        => $n,'c_UpdatedBy'   => $this->auth_username);
+        $where = array('c_ID'   => $id);
 
         $update = $this->Tree_model->update('categories', $data, $where);
             if ($update == true):
-                $this->session->set_flashdata('info', ' Data Sewa Bangunan has been removed ');
+                $this->session->set_flashdata('info', 'Folder has been removed ');
             endif;
-            redirect('rumah/');
+            redirect('admin/listFolder');
     }
 
     //===================USER PERMISSION========================
