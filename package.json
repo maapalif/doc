@@ -1,0 +1,13 @@
+{
+  "name": "Extention",
+  "version": "1.0.0",
+  "main": "index.php",
+  "author": "MIS7229",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~1.x",
+    "jquery-slim": "^3.0.0",
+    "metro-ui": "~3.x"
+  },
+  "repository": "https://bitbucket.org/linindopacific/infocenter"
+}
