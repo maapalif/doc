@@ -1,3 +1,18 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        var id = $("#delete").attr("data-id");
+        $.ajax({
+            type    : "POST",
+            data    : {id:id},
+            url     : "<?php echo site_url('tree/deleteAlert')?>" ,  
+            success : function(msg){
+                $(".delete").html(msg);
+            }
+        });
+
+    });
+</script>
+
 <div class="container" style="margin-top: 5px; margin-right: 0px; margin-left: 0px; max-width: 70%; font-size: 14px; ">
 
 	<div>
@@ -47,7 +62,7 @@
 							<?php }else{?>
 							<a href="<?php echo site_url('admin/editChild')?>/<?= $h->ID ?>" title="Edit"><i class="fa fa-fw fa-pencil-square" style="color: #000000;"></i></a>
 							<?php }?>
-							<a href="<?php echo site_url('admin/delete')?>/<?= $h->ID ?>" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-fw fa-window-close" style="color: #000000;"></i></a>
+							<a href="#" id="delete" data-id="<?= $h->ID; ?>" data-toggle="modal" data-target="#customModal"><i class="fa fa-fw fa-window-close" style="color: #000000;"></i></a>
 						</td>  
 				    </tr>
 				<?php } ?>
@@ -55,4 +70,22 @@
 			 </table>
 		</div>
 
+</div>
+
+<div class="modal fade custom-modal" id="customModal" tabindex="-1" role="dialog" aria-labelledby="customModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: red
+; color: #FFFFFF;">
+        <h5 class="modal-title" id="exampleModalLabel2">DELETE ALERT!!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body delete">
+        
+      </div>
+      
+    </div>
+  </div>
 </div>

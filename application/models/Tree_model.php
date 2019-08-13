@@ -16,9 +16,19 @@ class Tree_model extends CI_Model
 		return $query->result();
 	}
 
+  public function countfiles($id){
+    $query = $this->db2->query("SELECT * FROM upload WHERE c_ID = $id AND discard = 0 ");
+    return $query->num_rows();
+  }
+
   public function getName($id){
     $query = $this->db2->query("SELECT c_Name FROM categories WHERE c_ID = $id AND discard = 0");
     return ($query->num_rows()) ? $query->row()->c_Name : 0;
+  }
+
+  public function countfolders($id){
+    $query = $this->db2->query("SELECT c_Name FROM categories WHERE c_ParentID = $id AND discard = 0");
+    return $query->num_rows();
   }
 
   public function getNameDel($id){

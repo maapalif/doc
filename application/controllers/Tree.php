@@ -181,6 +181,17 @@ class Tree extends MY_Controller
         $this->load->view('tree/_ViewUpload', $data);
     }
 
+    function deleteAlert() {
+        $id = $this->input->post('id');
+        $data = array(
+            'id'     => $id,
+            'folders'  => $this->Tree_model->countfolders($id),
+            'files'  => $this->Tree_model->countfiles($id),
+        );
+
+        $this->load->view('admin/_DeleteAlert', $data);
+    }
+
     public function delete() {
         $this->require_min_level(3);
         $id = $this->uri->segment(3);
