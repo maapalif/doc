@@ -12,6 +12,7 @@ application/logs/*
 composer.lock
 yarn.lock
 
+assets/files/
 /user_guide/
 /system/
 /tests/
