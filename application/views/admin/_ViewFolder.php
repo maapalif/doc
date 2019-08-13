@@ -16,6 +16,7 @@
 <div class="card mb-3">
             <div class="card-header">
                 <h3><i class="fa fa-folder-open-o"></i> <?php echo $title." "."Folder"?> </h3>
+                Info : <?php echo $desc; ?>
             </div>
                 
             <div class="card-body">
@@ -45,7 +46,7 @@
                             <?php
                             $i = 1;
                             foreach($result as $h) {  
-                                $date = date("Y-m-d", strtotime($h->u_CreatedAt));
+                                $date = date("Y-m-d H:i:s", strtotime($h->u_CreatedAt));
                                 $user = $this->Tree_model->user2($h->u_CreatedBy);                          
                             ?>
                                 <tr>

@@ -107,6 +107,7 @@ class Admin extends MY_Controller
             $save = $this->Tree_model->save('upload', $data);
             if ($save == true){
                 $this->session->set_flashdata('success','File has been added');
+                helper_log("add", "menambahkan file ".$file_name."'", $this->auth_username, $this->auth_department);
                 redirect('admin/');
             }
             else 
@@ -203,11 +204,13 @@ class Admin extends MY_Controller
         }
         else 
         {
+            $folder = $this->input->post('nm_parents');
 
             $data = array(
                 
-                'c_Name'          =>  $this->input->post('nm_parents'),
+                'c_Name'          =>  $folder,
                 'c_Dept'          =>  $this->auth_department,   
+                'c_Desc'          =>  $this->input->post('desc'),
                 'c_CreatedBy'     =>  $this->auth_username
             );
 
@@ -215,6 +218,7 @@ class Admin extends MY_Controller
     
             if( $ins==TRUE) {
                 $this->session->set_flashdata('success', 'New Parents Folder has been added');
+                helper_log("add", "menambahkan parent folder ".$folder."'", $this->auth_username, $this->auth_department);
                 redirect('admin/listFolder');
             }
             else 
@@ -232,7 +236,7 @@ class Admin extends MY_Controller
         
         $this->verify_min_level(3);
 
-        $id =- $this->uri->segmen(3);
+        $id = $this->uri->segment(3);
 
         $ci = $this->Tree_model->edit($id);
         if ($ci != false){
@@ -240,13 +244,15 @@ class Admin extends MY_Controller
 
             $v = $this->form_validation;
             $v->set_rules('nm_parents','Parents Name','trim|required');
+            $v->set_rules('desc','Description','required');
             
             if($v->run() == FALSE) {
 
                 $data = array(  
 
-                    'title'     => 'New Parents Folder',
-                    'main_view' => 'admin/new_parents'
+                    'title'     => 'Edit Parents Folder',
+                    'data'      => $ci,
+                    'main_view' => 'admin/edit_parents'
                 );
 
 
@@ -273,11 +279,14 @@ class Admin extends MY_Controller
             }
             else 
             {
-                $id = $this->uri->segment(4); 
+                $id = $this->uri->segment(3); 
+
+                $folder = $this->input->post('nm_parents');
 
                 $data = array(
                     
-                    'c_Name'          =>  $this->input->post('nm_parents'),
+                    'c_Name'          =>  $folder,
+                    'c_Desc'          =>  $this->input->post('desc'),
                     'c_UpdatedBy'     =>  $this->auth_username
                 );
 
@@ -290,6 +299,7 @@ class Admin extends MY_Controller
         
                 if( $ins==TRUE) {
                     $this->session->set_flashdata('success', 'New Parents Folder has been added');
+                    helper_log("edit", "mengedit parent folder ".$folder."'", $this->auth_username, $this->auth_department);
                     redirect('admin/listFolder');
                 }
                 else 
@@ -322,7 +332,7 @@ class Admin extends MY_Controller
 
             $data = array(  
 
-                'title'     => 'New Parents Folder',
+                'title'     => 'New Child Folder',
                 'parents'   => $this->Tree_model->getParents($this->auth_department),
                 'main_view' => 'admin/new_child'
             );
@@ -358,10 +368,13 @@ class Admin extends MY_Controller
         else 
         {
 
+            $folder = $this->input->post('nm_child');
+
             $data = array(
                 
-                'c_Name'        =>  $this->input->post('nm_child'),
+                'c_Name'        =>  $folder,
                 'c_ParentID'    =>  $this->input->post('nm_parents'),
+                'c_Desc'        =>  $this->input->post('desc'),
                 'c_Dept'        =>  $this->auth_department,   
                 'c_CreatedBy'   =>  $this->auth_username
             );
@@ -370,6 +383,7 @@ class Admin extends MY_Controller
     
             if( $ins==TRUE) {
                 $this->session->set_flashdata('success', 'New Child Folder has been added');
+                helper_log("add", "menambahkan child folder ".$folder."'", $this->auth_username, $this->auth_department);
                 redirect('admin/listFolder');
             }
             else 
@@ -387,7 +401,7 @@ class Admin extends MY_Controller
         
         $this->verify_min_level(3);
 
-        $id =- $this->uri->segmen(3);
+        $id = $this->uri->segment(3);
 
         $ci = $this->Tree_model->edit($id);
         if ($ci != false){
@@ -400,13 +414,16 @@ class Admin extends MY_Controller
 
                 $data = array(  
 
-                    'title'     => 'New Parents Folder',
-                    'main_view' => 'admin/new_parents'
+                    'title'     => 'Edit Child Folder',
+                    'data'      => $ci,
+                    'parents'   =>  $this->Tree_model->getTree($this->auth_department),
+                    'main_view' => 'admin/edit_child'
                 );
 
 
                 $data['stylesheet'] = array(
-                    "https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+                "https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css",
+                base_url('assets/plugins/select2/css/select2.min.css'),
 
                 );
 
@@ -414,11 +431,16 @@ class Admin extends MY_Controller
                 "";
 
                 $data['javascripts'] = array(
-                    "https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+                    "https://code.jquery.com/ui/1.12.1/jquery-ui.js",
+                    base_url('assets/plugins/select2/js/select2.min.js')
                 );
 
 
-                $data['final_script'] = "";
+                $data['final_script'] = "
+                $(document).ready(function() {
+                    $('.select2').select2();
+                }); 
+                ";
 
 
                 $this->breadcrumb->add('Home', site_url('admin/'));
@@ -428,11 +450,14 @@ class Admin extends MY_Controller
             }
             else 
             {
-                $id = $this->uri->segment(4); 
+                $id = $this->uri->segment(3); 
+
+                $folder = $this->input->post('nm_child');
 
                 $data = array(
                     
-                    'c_Name'          =>  $this->input->post('nm_parents'),
+                    'c_Name'          =>  $folder,
+                    'c_Desc'          =>  $this->input->post('desc'),
                     'c_ParentID'      =>  $this->input->post('nm_parents'), 
                     'c_UpdatedBy'     =>  $this->auth_username
                 );
@@ -446,6 +471,7 @@ class Admin extends MY_Controller
         
                 if( $ins==TRUE) {
                     $this->session->set_flashdata('success', 'New Parents Folder has been added');
+                    helper_log("edit", "mengedit child folder ".$folder."'", $this->auth_username, $this->auth_department);
                     redirect('admin/listFolder');
                 }
                 else 
@@ -512,6 +538,8 @@ class Admin extends MY_Controller
             if ($update == true):
                 $this->session->set_flashdata('info', 'Folder has been removed ');
             endif;
+            $folder = $this->Tree_model->getNameDel($id);
+            helper_log("delete", "menghapus folder '".$folder."'", $this->auth_username, $this->auth_department);
             redirect('admin/listFolder');
     }
 
@@ -548,7 +576,7 @@ class Admin extends MY_Controller
         );
 
         $data['final_script'] = "
-       $(document).ready(function() {
+        $(document).ready(function() {
             $('#table').DataTable( {
             });
         });
@@ -580,7 +608,8 @@ class Admin extends MY_Controller
 
 
             $data['stylesheet'] = array(
-                "https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+                "https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css",
+                base_url('assets/plugins/select2/css/select2.min.css'),
 
             );
 
@@ -588,11 +617,16 @@ class Admin extends MY_Controller
             "";
 
             $data['javascripts'] = array(
-                "https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+                "https://code.jquery.com/ui/1.12.1/jquery-ui.js",
+                base_url('assets/plugins/select2/js/select2.min.js')
             );
 
 
-            $data['final_script'] = "";
+            $data['final_script'] = "
+            $(document).ready(function() {
+                $('.select2').select2();
+            }); 
+            ";
 
 
             $this->breadcrumb->add('Home', site_url('admin/'));
@@ -602,10 +636,11 @@ class Admin extends MY_Controller
         }
         else 
         {
+            $user = $this->input->post('user');
 
             $data = array(
                 
-                'p_User'          =>  $this->input->post('user'),
+                'p_User'          =>  $user,
                 'p_CreatedBy'     =>  $this->auth_username 
             );
 
@@ -613,6 +648,7 @@ class Admin extends MY_Controller
     
             if( $ins==TRUE) {
                 $this->session->set_flashdata('success', 'New User Permission has been added');
+                helper_log("add", "menambahkan user permission '".$user."'", $this->auth_username, $this->auth_department );
                 redirect('admin/listPermission');
             }
             else 
@@ -637,8 +673,55 @@ class Admin extends MY_Controller
 
         $update = $this->Tree_model->update('permission', $data, $where);
             if ($update == true):
-                $this->session->set_flashdata('info', ' Data Sewa Bangunan has been removed ');
+                $this->session->set_flashdata('info', 'USer Permission has been removed ');
             endif;
+            $user = $this->Tree_model->getUserPermission($id);
+            helper_log("add", "menghapus user permission '".$user."'", $this->auth_username, $this->auth_department);
             redirect('admin/listPermission');
+    }
+
+    //===============LOG===================
+
+    public function log()
+    {
+        $this->require_min_level(3);
+
+        $data = array(
+            'title'         =>  'LOG',
+            'data'          =>  $this->Tree_model->getLog($this->auth_department),
+            'main_view'     =>  'admin/log'
+        );
+
+        $data['stylesheet'] = array(
+            "https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css",
+            "https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css",
+            "https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css",
+            "https://cdn.datatables.net/fixedcolumns/3.2.6/css/fixedColumns.bootstrap4.min.css",
+            "https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default-dark/style.min.css",
+            base_url('assets/plugins/jquery.filer/css/jquery.filer.css'),
+            base_url('assets/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css'),
+        );
+     
+        $data['javascripts'] = array(
+            "https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js",
+            "https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js",
+            "https://cdn.datatables.net/fixedcolumns/3.2.6/js/dataTables.fixedColumns.min.js",
+            "https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js",
+            base_url('assets/plugins/jquery.filer/js/jquery.filer.min.js')
+        );
+
+        $data['final_script'] = "
+       $(document).ready(function() {
+            $('#table').DataTable( {
+            });
+        });
+        ";
+        
+        $this->breadcrumb->add('Home', site_url('admin/'));
+        $this->breadcrumb->add('Log', site_url('admin/log'));
+        $this->load->view('themes/v2/template', $data);
+
     }
 }

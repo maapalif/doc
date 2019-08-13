@@ -21,6 +21,16 @@ class Tree_model extends CI_Model
     return ($query->num_rows()) ? $query->row()->c_Name : 0;
   }
 
+  public function getNameDel($id){
+    $query = $this->db2->query("SELECT c_Name FROM categories WHERE c_ID = $id");
+    return ($query->num_rows()) ? $query->row()->c_Name : 0;
+  }
+
+  public function getDesc($id){
+    $query = $this->db2->query("SELECT c_Desc FROM categories WHERE c_ID = $id AND discard = 0");
+    return ($query->num_rows()) ? $query->row()->c_Desc : 0;
+  }
+
   public function getParents($dept){
     $query = $this->db2->select('c_ID as ID, C_Name as ParentsName')
                        ->from('categories')
@@ -71,7 +81,7 @@ class Tree_model extends CI_Model
   }
 
   public function getTree($dept) {
-      $query = $this->db2->select("c_ID as ID, c_Name as Name, c_ParentID as ParentID")
+      $query = $this->db2->select("c_ID as ID, c_Name as Name, c_ParentID as ParentID, c_Desc as Desc")
                          ->from('categories')
                          ->where('discard', 0)
                          ->where('C_Dept', $dept)
@@ -89,11 +99,20 @@ class Tree_model extends CI_Model
       return $query->result();
   }
 
-  public function edit($dept) {
-      $query = $this->db2->select("c_ID as ID, c_Name as Name, c_ParentID as ParentID")
+   public function getfile($id){
+    $query = $this->db2->select("u_Name")
+                       ->from('upload')
+                       ->where('u_ID', $id)
+                       ->get();
+
+    return ($query->num_rows()) ? $query->row()->u_Name : 0;
+  }
+
+  public function edit($id) {
+      $query = $this->db2->select("c_ID as ID, c_Name as Name, c_ParentID as ParentID, c_Desc as Desc")
                          ->from('categories')
                          ->where('discard', 0)
-                         ->where('C_Dept', $dept)
+                         ->where('c_ID', $id)
                          ->get();
 
       if($query){
@@ -119,11 +138,21 @@ class Tree_model extends CI_Model
       $query = $this->db2->select("p_User")
                          ->from('permission')
                          ->where('banned', 0)
-                         ->where('p_user', $user)
+                         ->where('p_User', $user)
                          ->limit(1)
                          ->get();
 
       return $query->num_rows();
+  }
+
+  public function getUserPermission($id) {
+      $query = $this->db2->select("p_User")
+                         ->from('permission')
+                         ->where('p_ID', $id)
+                         ->limit(1)
+                         ->get();
+
+      return ($query->num_rows()) ? $query->row()->p_User : 0;
   }
 
   public function save ($table, $data) {
@@ -147,5 +176,22 @@ class Tree_model extends CI_Model
           return false;
       }
   }
+
+  public function save_log($param)
+    {
+        $sql        = $this->db2->insert_string('log',$param);
+        $ex         = $this->db2->query($sql);
+        return $this->db->affected_rows($sql);
+    }
+
+  public function getLog($dept)
+    {
+        $query = $this->db2->select(" l_ID as ID, l_User as User, l_Time as Time, l_Desc as Desc, l_Dept as Dept ")
+                          ->from('log')
+                          ->where('l_Dept',$dept)
+                          ->order_by('l_Time', 'DESC')
+                          ->get();
+        return $query->result();
+    }  
 	
 }

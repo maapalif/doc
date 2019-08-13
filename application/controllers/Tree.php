@@ -117,6 +117,7 @@ class Tree extends MY_Controller
             $save = $this->Tree_model->save('upload', $data);
             if ($save == true){
                 $this->session->set_flashdata('success','File has been added');
+                helper_log("add", "menambahkan file ".$file_name."'", $this->auth_username, $this->auth_department);
                 redirect('tree/');
             }
             else 
@@ -167,6 +168,7 @@ class Tree extends MY_Controller
             'result' => $this->Tree_model->getall($id),
             'id'     => $id,
             'title'  => $this->Tree_model->getName($id),
+            'desc'  => $this->Tree_model->getDesc($id),
         );
 
     	$this->load->view('tree/_ViewFolder', $data);
@@ -193,6 +195,8 @@ class Tree extends MY_Controller
             if ($update == true):
                 $this->session->set_flashdata('info', ' File has been removed ');
             endif;
+            $file = $this->Tree_model->getfile($id);
+            helper_log("delete", "menghapus file '".$file."'", $this->auth_username, $this->auth_department); 
             redirect('tree/');
     }
 

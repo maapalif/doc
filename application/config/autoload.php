@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('serialization','cookie','url', 'file', 'form','tgl_indo');
+$autoload['helper'] = array('serialization','cookie','url', 'file', 'form','tgl_indo', 'log');
 
 /*
 | -------------------------------------------------------------------

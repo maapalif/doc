@@ -6,7 +6,7 @@
 	  <div class="form-group">
 	    <label>New User</label>
 	     <?=form_error('user', '<span class="badge badge-danger">','</span>'); ?>
-		   <select id="pic1" name="user" class="form-control" multiple="multiple" placeholder="Input User..">
+		   <select id="pic1" name="user" class="form-control select2 custom-select d-block my-3" placeholder="Input User..">
             <?php foreach($user as $h) { ?>
            <option value="<?php echo $h->username ?>">
             <?php echo $h->firstname." ".$h->middlename." ".$h->lastname ?></option>

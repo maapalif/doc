@@ -5,11 +5,14 @@
         function date_indo($tgl)
         {
             $ubah = gmdate($tgl, time()+60*60*8);
-            $pecah = explode("-",$ubah);
+            $belah = explode(" ",$ubah);
+            $date = $belah[0];
+            $jam = $belah[1];
+            $pecah = explode("-",$date);
             $tanggal = $pecah[2];
             $bulan = bulan($pecah[1]);
             $tahun = $pecah[0];
-            return $tanggal.' '.$bulan.' '.$tahun;
+            return $jam.'<br>'.$tanggal.' '.$bulan.' '.$tahun;
         }
     }
       

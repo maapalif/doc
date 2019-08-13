@@ -20,6 +20,13 @@
                             </ul>
                         </li>
 
+                        <li class="submenu">
+                        <a href="#"><i class="fa fa-fw fa-history"></i> <span> Log  </span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled">
+                                <li><a href="<?php echo base_url('index.php/admin/log') ?>"><i class="fa fa-fw fa-arrow-circle-o-right"></i>Show Log</a></li>
+                            </ul>
+                        </li>
+
                         <?php if($auth_department == 'MIS'){ ?>
 
                         <li class="submenu">

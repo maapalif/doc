@@ -11,6 +11,16 @@
 	 </div>
 	</div>
 
+	<div class="row">
+	 <div class="col-lg-12">
+	  <div class="form-group">
+	    <label>Deskripsi</label>
+	     <?=form_error('desc', '<span class="badge badge-danger">','</span>'); ?>
+	     <input type="text" name="desc" class="form-control" placeholder="Input Folder Description..">
+	  </div>
+	 </div>
+	</div>
+
 	<div></div>
 
 	<button type="submit" class="btn btn-md btn-success">SAVE</button>

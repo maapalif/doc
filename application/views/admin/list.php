@@ -15,6 +15,7 @@
 			        <th width="1%"><center>No</center></th>
 					<th><center>Folder Name</center></th>
 					<th><center>Parent Folder</center></th>
+					<th><center>Description</center></th>
 					<th width="1%"><center>Act</center></th>
 			      </tr>
 			    </thead>
@@ -38,10 +39,11 @@
 				        		
 				        } 
 
-				        ?></td>		
+				        ?></td>	
+				        <td align= "center"><?php echo $h->Desc ;?></td>	
 				        <td align= "center">
 				        	<?php if($h->ParentID == NULL) { ?>
-							<a href="<?php echo site_url('admin/editParent')?>/<?= $h->ID ?>" title="Edit"><i class="fa fa-fw fa-pencil-square" style="color: #000000;"></i></a>
+							<a href="<?php echo site_url('admin/editParents')?>/<?= $h->ID ?>" title="Edit"><i class="fa fa-fw fa-pencil-square" style="color: #000000;"></i></a>
 							<?php }else{?>
 							<a href="<?php echo site_url('admin/editChild')?>/<?= $h->ID ?>" title="Edit"><i class="fa fa-fw fa-pencil-square" style="color: #000000;"></i></a>
 							<?php }?>

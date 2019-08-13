@@ -6,7 +6,17 @@
 	  <div class="form-group">
 	    <label>Nama Parent</label>
 	     <?=form_error('nm_parents', '<span class="badge badge-danger">','</span>'); ?>
-	     <input type="text" name="nm_parents" class="form-control" value="<?= $name ?>">
+	     <input type="text" name="nm_parents" class="form-control" value="<?= $data->Name ?>">
+	  </div>
+	 </div>
+	</div>
+
+	<div class="row">
+	 <div class="col-lg-12">
+	  <div class="form-group">
+	    <label>Deskripsi</label>
+	     <?=form_error('desc', '<span class="badge badge-danger">','</span>'); ?>
+	     <input type="text" name="desc" class="form-control" value="<?= $data->Desc ?>">
 	  </div>
 	 </div>
 	</div>
