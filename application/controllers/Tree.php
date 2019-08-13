@@ -55,6 +55,21 @@ class Tree extends MY_Controller
             );
 
             $data['final_script'] = "
+            $(document).ready(function() {
+            $('#table').DataTable( {
+                 dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'excel'
+                    ],
+                 scrollY:        500,
+                 scrollX:        true,
+                 scrollCollapse: true,
+                 paging:         true,
+                 fixedColumns:   {
+                    leftColumns: 2
+                }
+            } );
+        } );
             ";
             
             $this->breadcrumb->add('Home', site_url('tree/'));

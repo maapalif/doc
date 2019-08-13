@@ -47,6 +47,10 @@ class Admin extends MY_Controller
         );
 
         $data['final_script'] = "
+        $(document).ready(function() {
+            $('#table').DataTable( {
+            });
+        });
         ";
         
         $this->breadcrumb->add('Home', site_url('admin/'));
@@ -147,6 +151,10 @@ class Admin extends MY_Controller
         );
 
         $data['final_script'] = "
+        $(document).ready(function() {
+            $('#table').DataTable( {
+            });
+        });
         ";
         
         $this->breadcrumb->add('Home', site_url('admin/'));
@@ -540,6 +548,10 @@ class Admin extends MY_Controller
         );
 
         $data['final_script'] = "
+       $(document).ready(function() {
+            $('#table').DataTable( {
+            });
+        });
         ";
         
         $this->breadcrumb->add('Home', site_url('admin/'));
