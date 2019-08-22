@@ -50,8 +50,10 @@
 				        if($h->ParentID == NULL){
 				        	echo "Parents";
 				        }
-				        else{
+				        else
+				        {
 				        	$ParentName = $this->Tree_model->getParentName($h->ParentID,$auth_department);
+				        	
 				        	
 				        	echo $ParentName;
 				        		
@@ -60,7 +62,11 @@
 				        ?></td>	
 				        <td align= "center"><?php echo $h->Desc ;?></td>	
 				        <td align= "center">
+				        	<?php $cek = $this->Tree_model->cekParentID($h->ID,$auth_department);
+
+				        	if($cek == NULL):?> 
 				        	<a href="<?php echo site_url('admin/delete')?>/<?= $h->ID ?>" title="Delete" onclick="return confirm('Are you sure you want to delete? There is <?php echo $folders ?> Folder and <?php echo $files ?> Files.' )"><i class="fa fa-fw fa-window-close" style="color: #000000;"></i></a>
+				        	<?php endif; ?>
 				        	<?php if($h->ParentID == NULL) { ?>
 							<a href="<?php echo site_url('admin/editParents')?>/<?= $h->ID ?>" title="Edit"><i class="fa fa-fw fa-pencil-square" style="color: #000000;"></i></a>
 							<?php }else{?>

@@ -84,7 +84,8 @@ class Tree_model extends CI_Model
       $query = $this->db2->select("c_Name as PName")
                          ->from('categories')
                          ->where('discard', 0)
-                         ->where('C_Dept', $dept)
+                         ->where('c_Dept', $dept)
+                         ->where('c_ID', $id)
                          ->get();
 
       return ($query->num_rows()) ? $query->row()->PName : 0;
@@ -95,6 +96,8 @@ class Tree_model extends CI_Model
                          ->from('categories')
                          ->where('discard', 0)
                          ->where('C_Dept', $dept)
+                         ->order_by('c_ParentID', 'ASC')
+                         ->order_by('c_Name', 'ASC')
                          ->get();
 
       return $query->result();
@@ -116,6 +119,15 @@ class Tree_model extends CI_Model
                        ->get();
 
     return ($query->num_rows()) ? $query->row()->u_Name : 0;
+  }
+
+  public function getidfile($id){
+    $query = $this->db2->select("u_ID")
+                       ->from('upload')
+                       ->where('c_ID', $id)
+                       ->get();
+
+    return ($query->num_rows()) ? $query->row()->u_ID : 0;
   }
 
   public function edit($id) {
@@ -150,6 +162,17 @@ class Tree_model extends CI_Model
                          ->where('banned', 0)
                          ->where('p_User', $user)
                          ->limit(1)
+                         ->get();
+
+      return $query->num_rows();
+  }
+
+  public function cekParentID($id,$dept) {
+      $query = $this->db2->select("c_Name as PName")
+                         ->from('categories')
+                         ->where('discard', 0)
+                         ->where('c_Dept', $dept)
+                         ->where('c_ParentID', $id)
                          ->get();
 
       return $query->num_rows();

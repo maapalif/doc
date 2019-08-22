@@ -184,7 +184,6 @@ class Tree extends MY_Controller
     function deleteAlert() {
         $id = $this->input->post('id');
 
-        die(var_dump($id));
         $data = array(
             'id'     => $id,
             'folders'  => $this->Tree_model->countfolders($id),
@@ -205,10 +204,11 @@ class Tree extends MY_Controller
         $where = array('u_ID'   => $id);
 
         $update = $this->Tree_model->update('upload', $data, $where);
+            $file = $this->Tree_model->getfile($id);
             if ($update == true):
+                rename(FCPATH.'assets/files/'.$file, FCPATH.'assets/files/trash/'.$file);
                 $this->session->set_flashdata('info', ' File has been removed ');
             endif;
-            $file = $this->Tree_model->getfile($id);
             helper_log("delete", "menghapus file '".$file."'", $this->auth_username, $this->auth_department); 
             redirect('tree/');
     }

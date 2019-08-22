@@ -123,7 +123,7 @@ class Admin extends MY_Controller
 
     public function listFolder()
     {
-        $this->verify_min_level(3);
+        $this->require_min_level(3);
 
         $data = array(
             'title'         =>  'List Folder',
@@ -167,7 +167,7 @@ class Admin extends MY_Controller
     public function addParents()
     {
         
-        $this->verify_min_level(3);
+        $this->require_min_level(3);
 
         $v = $this->form_validation;
         $v->set_rules('nm_parents','Parents Name','trim|required');
@@ -234,7 +234,7 @@ class Admin extends MY_Controller
     public function editParents()
     {
         
-        $this->verify_min_level(3);
+        $this->require_min_level(3);
 
         $id = $this->uri->segment(3);
 
@@ -322,7 +322,7 @@ class Admin extends MY_Controller
     public function addChild()
     {
         
-        $this->verify_min_level(3);
+        $this->require_min_level(3);
 
         $v = $this->form_validation;
         $v->set_rules('nm_parents','Parents Name','required');
@@ -399,7 +399,7 @@ class Admin extends MY_Controller
     public function editChild()
     {
         
-        $this->verify_min_level(3);
+        $this->require_min_level(3);
 
         $id = $this->uri->segment(3);
 
@@ -525,7 +525,9 @@ class Admin extends MY_Controller
     }
 
     public function delete() {
-        $this->require_min_level(1);
+
+        $this->require_min_level(3);
+
         $id = $this->uri->segment(3);
         //var_dump($id);
         $n = 1;
@@ -533,13 +535,29 @@ class Admin extends MY_Controller
             
         $data  = array('discard'        => $n,'c_UpdatedBy'   => $this->auth_username);
         $where = array('c_ID'   => $id);
+        $or    = array('c_ParentID' => $id);
 
         $update = $this->Tree_model->update('categories', $data, $where);
+
             if ($update == true):
-                $this->session->set_flashdata('info', 'Folder has been removed ');
+                $datap  = array('discard'        => $n,'u_UpdatedBy'   => $this->auth_username);
+                $wherep = array('c_ID'   => $id);
+                $files  = $this->Tree_model->countfiles($id);
+                $idf = $this->Tree_model->getidfile($id);
+                $updatep = $this->Tree_model->update('upload', $datap, $wherep);
+                    $file = $this->Tree_model->getfile($idf);
+                    if ($updatep == true):
+                        rename(FCPATH.'assets/files/'.$file, FCPATH.'assets/files/trash/'.$file);
+                    endif;
+                    $this->session->set_flashdata('info', 'Files and Folder has been removed ');
             endif;
             $folder = $this->Tree_model->getNameDel($id);
+            if($updatep != true){
             helper_log("delete", "menghapus folder '".$folder."'", $this->auth_username, $this->auth_department);
+            }
+            else{
+            helper_log("delete", "menghapus folder '".$folder."' dan '".$files."' file", $this->auth_username, $this->auth_department);    
+            }
             redirect('admin/listFolder');
     }
 
@@ -592,7 +610,7 @@ class Admin extends MY_Controller
     public function addPermission()
     {
         
-        $this->verify_min_level(3);
+        $this->require_min_level(3);
 
         $v = $this->form_validation;
         $v->set_rules('user','username','required');
@@ -663,6 +681,7 @@ class Admin extends MY_Controller
 
     public function deleteUser() {
         $this->require_min_level(3);
+
         $id = $this->uri->segment(3);
         //var_dump($id);
         $n = 1;
