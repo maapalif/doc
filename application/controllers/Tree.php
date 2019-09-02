@@ -71,10 +71,12 @@ class Tree extends MY_Controller
     function upload(){
 
         $this->require_min_level(3);
+        ini_set('max_execution_time', 0); 
+        ini_set('memory_limit','-1');
 
         $config['upload_path']      = './assets/files/';
         $config['allowed_types']    = 'docs|docx|ppt|pptx|xls|xlsx|pdf|rar|zip|7zip|jpg|jpeg|png|gif|txt';
-        $config['max_size']         = 1024;
+        $config['max_size']         = 20480;
 
         $this->upload->initialize($config);
 
@@ -122,6 +124,7 @@ class Tree extends MY_Controller
             }
             else 
             {
+                die();
                 $this->session->set_flashdata('error','Something is wrong!');
                 redirect('tree/upload/');
             }
