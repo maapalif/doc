@@ -387,7 +387,7 @@ $config['encryption_key'] = hex2bin('2f7c11fe8616f4f0265070f5093c84f6');
 |
 */
 $config['sess_driver'] = 'files';
-$config['sess_cookie_name'] = 'ci_session';
+$config['sess_cookie_name'] = 'lpi_session';
 $config['sess_expiration'] = 3600*24*0.5;
 $config['sess_save_path'] = sys_get_temp_dir();
 $config['sess_match_ip'] = FALSE;
